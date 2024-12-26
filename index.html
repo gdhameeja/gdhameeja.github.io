@@ -1,8 +1,326 @@
-<h1> GAURAV DHAMEEJA </h1>
-<a src="https://github.com/gdhameeja"> Github profile </a>
-<br>
-<h3> Contact Information </h3>
-<p>
-Email: gdhameja@gmail.com
-<a src="https://www.linkedin.com/in/gaurav-dhameeja-50455b104/"> LinkedIn </a>
-</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gaurav Dhameeja - Hacker Resume</title>
+    <style>
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            color: #00ff00;
+            overflow-y: auto; /* Enable vertical scrolling */
+        }
+        header {
+            text-align: center;
+            padding: 20px;
+            border-bottom: 2px solid #00ff00;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        h1, h2, h3 {
+            color: #00ff00;
+        }
+        .section {
+            display: none;
+            margin-bottom: 20px;
+        }
+        .hacker-prompt {
+            font-size: 1.2em;
+            margin: 20px 0;
+        }
+        .cursor {
+            display: inline-block;
+            background-color: #00ff00;
+            width: 10px;
+            height: 20px;
+            animation: blink 1s steps(2, start) infinite;
+        }
+        .skills-bar {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .skill {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .progress-bar {
+            flex-grow: 1;
+            height: 10px;
+            margin-left: 10px;
+            background: #004400;
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+        }
+        .progress {
+            height: 100%;
+            background-color: #00ff00;
+            border-radius: 5px;
+            width: 0;
+            transition: width 0.5s ease-in-out;
+        }
+        footer {
+            text-align: center;
+            padding: 10px;
+            border-top: 2px solid #00ff00;
+        }
+
+        .skill-category h3 {
+            cursor: pointer;
+            margin: 10px 0;
+        }
+        .category-content {
+            display: none;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Gaurav Dhameeja</h1>
+        <p>Email: <a href="mailto:gdhameeja@gmail.com" style="color: #00ff00;">gdhameeja@gmail.com</a> | Phone: +91-9652425622 | <a href="https://github.com/gdhameeja" target="_blank" style="color: #00ff00;">GitHub</a></p>
+    </header>
+
+    <div class="container">
+        <div id="prompt" class="hacker-prompt">Initializing resume<span class="cursor"></span></div>
+
+        <div id="skills" class="section">
+            <h2>Skills</h2>
+            <div class="skills-bar">
+                <!-- Languages -->
+                <div class="skill-category">
+                    <h3 onclick="toggleCategory(this)">Languages ▼</h3>
+                    <div class="category-content">
+                        <div class="skill">
+                            <span>Go/Golang</span>
+                            <div class="progress-bar" style="--progress-width: 90%;"><div class="progress"></div></div>
+                        </div>
+                        <div class="skill">
+                            <span>Python</span>
+                            <div class="progress-bar" style="--progress-width: 85%;"><div class="progress"></div></div>
+                        </div>
+                        <div class="skill">
+                            <span>SQL</span>
+                            <div class="progress-bar" style="--progress-width: 80%;"><div class="progress"></div></div>
+                        </div>
+                        <div class="skill">
+                            <span>HTML</span>
+                            <div class="progress-bar" style="--progress-width: 70%;"><div class="progress"></div></div>
+                        </div>
+                        <div class="skill">
+                            <span>JavaScript</span>
+                            <div class="progress-bar" style="--progress-width: 55%;"><div class="progress"></div></div>
+                        </div>
+                        <div class="skill">
+                            <span>Java</span>
+                            <div class="progress-bar" style="--progress-width: 70%;"><div class="progress"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Frameworks -->
+                <div class="skill-category">
+                    <h3 onclick="toggleCategory(this)">Frameworks ▼</h3>
+                    <div class="category-content">
+                        <div class="skill">
+                            <span>gRPC</span>
+                            <div class="progress-bar" style="--progress-width: 85%;"><div class="progress"></div></div>
+                        </div>
+                        <div class="skill">
+                            <span>Protocol Buffers</span>
+                            <div class="progress-bar" style="--progress-width: 85%;"><div class="progress"></div></div>
+                        </div>
+                        <div class="skill">
+                            <span>REST</span>
+                            <div class="progress-bar" style="--progress-width: 90%;"><div class="progress"></div></div>
+                        </div>
+                        <div class="skill">
+                            <span>Microservices</span>
+                            <div class="progress-bar" style="--progress-width: 90%;"><div class="progress"></div></div>
+                        </div>
+                        <div class="skill">
+                            <span>Django</span>
+                            <div class="progress-bar" style="--progress-width: 75%;"><div class="progress"></div></div>
+                        </div>
+                        <div class="skill">
+                            <span>React</span>
+                            <div class="progress-bar" style="--progress-width: 65%;"><div class="progress"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Databases -->
+                <div class="skill-category">
+                    <h3 onclick="toggleCategory(this)">Databases ▼</h3>
+                    <div class="category-content">
+                        <div class="skill">
+                            <span>MySQL</span>
+                            <div class="progress-bar" style="--progress-width: 90%;"><div class="progress"></div></div>
+                        </div>
+                        <div class="skill">
+                            <span>PostgreSQL</span>
+                            <div class="progress-bar" style="--progress-width: 85%;"><div class="progress"></div></div>
+                        </div>
+                        <div class="skill">
+                            <span>MongoDB</span>
+                            <div class="progress-bar" style="--progress-width: 75%;"><div class="progress"></div></div>
+                        </div>
+                        <div class="skill">
+                            <span>Redis</span>
+                            <div class="progress-bar" style="--progress-width: 70%;"><div class="progress"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tools -->
+                <div class="skill-category">
+                    <h3 onclick="toggleCategory(this)">Tools ▼</h3>
+                    <div class="category-content">
+                        <div class="skill">
+                            <span>Git</span>
+                            <div class="progress-bar" style="--progress-width: 95%;"><div class="progress"></div></div>
+                        </div>
+                        <div class="skill">
+                            <span>AWS</span>
+                            <div class="progress-bar" style="--progress-width: 80%;"><div class="progress"></div></div>
+                        </div>
+                        <div class="skill">
+                            <span>Docker</span>
+                            <div class="progress-bar" style="--progress-width: 85%;"><div class="progress"></div></div>
+                        </div>
+                        <div class="skill">
+                            <span>Kubernetes</span>
+                            <div class="progress-bar" style="--progress-width: 75%;"><div class="progress"></div></div>
+                        </div>
+                        <div class="skill">
+                            <span>Istio</span>
+                            <div class="progress-bar" style="--progress-width: 65%;"><div class="progress"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="education" class="section">
+            <h2>Education</h2>
+            <p><strong>Bachelor in Computer Applications</strong></p>
+            <p>Punjabi University, Patiala | Apr 2016</p>
+        </div>
+
+        <div id="work-experience" class="section">
+            <h2>Work Experience</h2>
+            <div>
+                <h3>Dubai Technologies | Senior Software Engineer</h3>
+                <p>Dubai | Nov 2024 – Present</p>
+                <ul>
+                    <li>Implemented end to end IAM solutions for company's flagship tracking products using <strong>Keycloak, Golang, PostgreSQL, Dockerand Kubernetes</li>
+                </ul>
+            </div>
+            <div>
+            <div>
+                <h3>EPAM | Senior Software Engineer</h3>
+                <p>Bengaluru | February 2024 – Nov 2024</p>
+                <ul>
+                    <li>Worked on advanced networking management using Go, PostgreSQL, Docker, Kubernetes.</li>
+                    <li>Developed complex SQL queries for DNS, IP, and DHCP analytics.</li>
+                </ul>
+            </div>
+            <div>
+                <h3>DELL TECHNOLOGIES | Senior Software Engineer</h3>
+                <p>Bengaluru | January 2022 – February 2024</p>
+                <ul>
+                    <li>Implemented IAM solutions using Keycloak, OPA, and Go.</li>
+                    <li>Developed microservices authentication using Keycloak service accounts.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="projects" class="section">
+            <h2>Projects</h2>
+            <div>
+                <h3>HEIMDALL - DELL TECHNOLOGIES</h3>
+                <p>Go/Golang, Keycloak, PostgreSQL, Kubernetes, Istio</p>
+                <p>IAM solution for internal and external customers, implementing various authentication flows.</p>
+            </div>
+            <div>
+                <h3>DBSS - ERICSSON/BANGLALINK</h3>
+                <p>Python, Django, MySQL, Celery, Redis</p>
+                <p>Telecom management application with over 90 million users in Bangladesh.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Gaurav Dhameeja</p>
+    </footer>
+
+    <script>
+    function animateSkills() {
+    const skillBars = document.querySelectorAll('.progress-bar');
+    skillBars.forEach(bar => {
+        const progress = bar.querySelector('.progress');
+        const progressWidth = bar.style.getPropertyValue('--progress-width');
+        progress.style.width = progressWidth;
+    });
+}
+        const prompts = [
+            "Gaining access to skills database...",
+            "Decrypting education credentials...",
+            "Fetching work experience logs...",
+            "Loading projects repository..."
+        ];
+
+        const sections = ["skills", "education", "work-experience", "projects"];
+        let currentStep = 0;
+
+        function showPrompt() {
+            const promptElement = document.getElementById('prompt');
+            if (currentStep < prompts.length) {
+                promptElement.textContent = prompts[currentStep];
+                currentStep++;
+                setTimeout(showSection, 1500);
+            } else {
+                promptElement.style.display = 'none';
+            }
+        }
+
+        function showSection() {
+            const sectionId = sections[currentStep - 1];
+            const sectionElement = document.getElementById(sectionId);
+            sectionElement.style.display = 'block';
+                if (sectionId === "skills") {
+        animateSkills();
+    }
+            showPrompt();
+        }
+
+        function toggleCategory(header) {
+            const content = header.nextElementSibling;
+            if (content.style.display === "block") {
+                content.style.display = "none";
+                header.textContent = header.textContent.replace('▼', '▶');
+            } else {
+                content.style.display = "block";
+                header.textContent = header.textContent.replace('▶', '▼');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            showPrompt();
+        });
+     </script>
+
+</body>
+</html>
