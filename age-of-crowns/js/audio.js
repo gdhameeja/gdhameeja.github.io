@@ -71,7 +71,7 @@ class Sound {
   play(name, v = 1) {
     if (!this.ac || this.ac.state !== 'running') return;
     const now = this.ac.currentTime;
-    const gap = { chop: 0.12, mine: 0.12, hammer: 0.14, till: 0.15, pluck: 0.15, cut: 0.15, melee: 0.06, bow: 0.05, die: 0.08, throw: 0.08 }[name] || 0.04;
+    const gap = { gun: 0.07, chop: 0.12, mine: 0.12, hammer: 0.14, till: 0.15, pluck: 0.15, cut: 0.15, melee: 0.06, bow: 0.05, die: 0.08, throw: 0.08 }[name] || 0.04;
     if (this.last[name] && now - this.last[name] < gap) return;
     this.last[name] = now;
     const r = Math.random;
@@ -91,6 +91,7 @@ class Sound {
       case 'impact': this.noise(0.45, 'lowpass', 500, 1, 0.4 * v); this.tone(70, 0.35, 'sine', 0.3 * v, { slide: 40 }); break;
       case 'chop': this.noise(0.06, 'bandpass', 450 + r() * 200, 3, 0.18 * v); this.tone(220, 0.05, 'triangle', 0.06 * v); break;
       case 'mine': this.tone(2100 + r() * 500, 0.07, 'sine', 0.08 * v); this.noise(0.04, 'highpass', 3000, 1, 0.08 * v); break;
+      case 'gun': this.noise(0.06, 'bandpass', 1800, 1.2, 0.22 * v); this.tone(110, 0.05, 'square', 0.06 * v); break;
       case 'till': this.noise(0.09, 'lowpass', 900, 1, 0.12 * v); break;
       case 'pluck': this.noise(0.05, 'highpass', 2800, 1, 0.05 * v); break;
       case 'cut': this.noise(0.07, 'bandpass', 1800, 2, 0.06 * v); break;

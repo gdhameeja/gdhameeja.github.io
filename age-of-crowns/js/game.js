@@ -614,7 +614,7 @@ class Game {
     let acc = st.accuracy == null ? 1 : st.accuracy;
     if (moving && !p.mods.ballistics && st.proj !== 'stone' && st.proj !== 'boulder') acc *= 0.8;
     const hit = st.ballistic ? false : Math.random() < acc;
-    const speed = { arrow: 8, bolt: 9, javelin: 6.5, axe: 5.5, spear: 6, stone: 5, boulder: 4.2 }[type] || 7;
+    const speed = { arrow: 8, bolt: 9, javelin: 6.5, axe: 5.5, spear: 6, stone: 5, boulder: 4.2, bullet: 22 }[type] || 7;
     if (st.ballistic) {
       // lead the shot slightly if the target is a unit, but don't track it afterwards
       if (t.kind === 'unit' && type === 'stone' && p.mods.ballistics) { tx += (t.x - t.px) * 4; ty += (t.y - t.py) * 4; }
@@ -631,7 +631,7 @@ class Game {
       angle: 0,
     };
     this.projectiles.push(pr);
-    this.sfx(type === 'stone' || type === 'boulder' ? 'catapult' : type === 'javelin' || type === 'axe' || type === 'spear' ? 'throw' : 'bow', sx, sy);
+    this.sfx(type === 'bullet' ? 'gun' : type === 'stone' || type === 'boulder' ? 'catapult' : type === 'javelin' || type === 'axe' || type === 'spear' ? 'throw' : 'bow', sx, sy);
   }
 
   updateProjectiles(dt) {
@@ -921,7 +921,7 @@ class Game {
     if (!b.built) {
       b.bcNow++;
       const n = Math.max(1, b.bcPrev);
-      const dp = dt * p.mods.buildRate * (3 / (n + 2)) / b.def.time;
+      const dp = p.aegis ? 1 : dt * p.mods.buildRate * (3 / (n + 2)) / b.def.time;
       b.progress = Math.min(1, b.progress + dp);
       b.hp = Math.min(b.maxHp, b.hp + b.maxHp * dp);
       this.workBeat(u, 'build', b, dt);
@@ -1095,6 +1095,7 @@ class Game {
         let best = null, bd = 1e9;
         for (const v of arr) {
           if (v.dead || v.owner === 0 || v.st.classes.includes('siege')) continue;
+          if (u.owner && this.players[u.owner].isAlly(v.owner)) continue;   // tamed predators spare their master's people
           const d = Math.hypot(v.x - u.x, v.y - u.y);
           if (d < bd && d < u.st.los) { bd = d; best = v; }
         }
@@ -1182,14 +1183,14 @@ class Game {
           if (!q.housed) { q.housed = true; this.emit('housed', p, b); }
         } else {
           q.housed = false;
-          q.t += dt * (p.mods.trainSpeed[b.type] || 1);
+          q.t += p.aegis ? q.total : dt * (p.mods.trainSpeed[b.type] || 1);
           if (q.t >= q.total) {
             b.queue.shift();
             this.spawnFrom(b, q.type);
           }
         }
       } else {
-        q.t += dt;
+        q.t += p.aegis ? q.total : dt;
         if (q.t >= q.total) { b.queue.shift(); p.research(q.id); this.sfx('research', b.x, b.y); }
       }
     }
@@ -1620,6 +1621,60 @@ class Game {
       u.bellOrder = null;
     }
     this.players[pid].bellRung = false;
+  }
+
+  // ------------------------------------------------------------------ cheat codes (AoE II classics + a few extras)
+  cheat(pid, text) {
+    const p = this.players[pid];
+    const code = String(text).toLowerCase().replace(/\s+/g, ' ').trim();
+    const give = (r, n) => { p.res[r] += n; return `+${n} ${r}`; };
+    const tc = this.buildings.find(b => b.owner === pid && b.type === 'towncenter' && !b.dead);
+    const spawnNear = (type, n = 1) => {
+      const at = tc || this.units.find(u => u.owner === pid && !u.dead) || { x: this.starts[pid].x, y: this.starts[pid].y, w: 4, h: 4 };
+      const out = [];
+      for (let i = 0; i < n; i++) {
+        const spot = this.freeSpotNear(at.x + 3 + (i % 3), at.y + 3 + Math.floor(i / 3), pid, 8);
+        if (spot) out.push(this.addUnit(type, pid, spot[0], spot[1]));
+      }
+      this.updatePop();
+      return out;
+    };
+    let msg = null;
+    const torp = code.match(/^torpedo ?([1-8])$/);
+    switch (code) {
+      case 'cheese steak jerky': msg = give('food', 1000); break;
+      case 'lumberjack': msg = give('wood', 1000); break;
+      case 'robin hood': msg = give('gold', 1000); break;
+      case 'rock on': msg = give('stone', 1000); break;
+      case 'ninjalui': for (const r of RES) p.res[r] += 100000; msg = '+100,000 of everything'; break;
+      case 'marco': this.explored.fill(1); msg = 'Map revealed'; break;
+      case 'polo': this.reveal = this.reveal === 'all' ? false : 'all'; if (this.reveal) this.explored.fill(1); msg = this.reveal ? 'Fog of war removed' : 'Fog of war restored'; break;
+      case 'aegis': p.aegis = !p.aegis; p.mods.gather = p.aegis ? Object.fromEntries(Object.entries(p.mods.gather).map(([k, v]) => [k, v * 25])) : Object.fromEntries(Object.entries(p.mods.gather).map(([k, v]) => [k, v / 25])); msg = p.aegis ? 'Instant building, training, research and super-fast gathering' : 'Aegis off'; break;
+      case 'how do you turn this on': spawnNear('cobracar'); msg = 'Cobra Car delivered'; break;
+      case 'big army': spawnNear(p.resolve('knight'), 6); spawnNear(p.resolve('archer'), 6); msg = 'An army appears'; break;
+      case 'to the future': {
+        const next = ['feudal', 'castle', 'imperial'][p.age];
+        if (next) { p.research(next); msg = `Advanced to the ${AGES[p.age]}`; } else msg = 'Already in the Imperial Age';
+        break;
+      }
+      case 'natural wonders': {
+        let n = 0;
+        for (const u of this.units) if (!u.dead && u.owner === 0 && u.st.animal) { u.owner = pid; u.st = p.stats[u.type]; u.order = null; n++; }
+        msg = `You now command ${n} animals`; break;
+      }
+      case 'black death':
+        for (const q of this.players) if (q.id && q.alive && p.isEnemy(q.id)) this.resign(q.id);
+        msg = 'Plague sweeps your enemies away'; break;
+      case 'i r winner': this.endGame(p.team, 'conquest'); msg = 'Victory!'; break;
+      case 'wimpywimpywimpy': this.resign(pid); msg = 'You gave up'; break;
+      default:
+        if (torp) {
+          const q = this.players[+torp[1]];
+          if (q && q.id !== pid && q.alive) { this.resign(q.id); msg = `${q.name} torpedoed`; } else msg = 'No such opponent';
+        }
+    }
+    if (msg) { p.usedCheats = true; this.sfx('research', 0, 0); }
+    return msg;
   }
 
   marketPrice(res, buy) { return Math.max(20, Math.round(this.market[res] * (buy ? 1.3 : 0.7))); }

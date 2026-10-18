@@ -314,6 +314,23 @@ body.touch .small-screen-note { display: block; }
   .top-right #btn-score, .top-right select { display: none; }
   .settings { grid-template-columns: minmax(0, 1fr); }
 }
+/* ---------------------------------------------------------------- cheats */
+.cheats { margin: 14px 0 6px; border: 1px solid rgba(196,154,69,0.35); border-radius: 4px; padding: 8px 12px; background: rgba(0,0,0,0.2); }
+.cheats summary { cursor: pointer; font-family: var(--font-display); color: var(--brass-l); font-size: 1.1rem; }
+.cheat-hint { color: var(--parch-d); font-size: 0.85rem; margin: 6px 0 8px; }
+.cheat-hint kbd { border: 1px solid rgba(196,154,69,0.5); border-radius: 2px; padding: 0 4px; font-size: 0.8rem; }
+#cheat-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 6px; max-height: 42vh; overflow-y: auto; }
+.cheat { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; text-align: left; padding: 6px 9px; border-radius: 3px; background: rgba(0,0,0,0.3); border: 1px solid rgba(196,154,69,0.3); }
+.cheat b { font-weight: 700; color: var(--brass-l); font-size: 0.9rem; }
+.cheat span { color: var(--parch-d); font-size: 0.78rem; }
+.cheat:hover { border-color: var(--brass-l); }
+.cheat.used { background: rgba(111,154,62,0.45); border-color: #8ff070; }
+.cheat-form { display: flex; gap: 6px; margin-top: 8px; }
+.cheat-form input { flex: 1; min-width: 0; }
+#chat { position: fixed; left: 50%; bottom: 210px; transform: translateX(-50%); width: min(460px, 90vw); z-index: 35; }
+#chat input { width: 100%; padding: 8px 12px; font-size: 1rem; background: rgba(15,10,6,0.94); border: 1px solid var(--brass); border-radius: 3px; color: var(--parch); }
+body.compact #chat { bottom: auto; top: 40px; }
+
 /* ---------------------------------------------------------------- touch devices */
 #touchbar { display: none; }
 body.touch { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }

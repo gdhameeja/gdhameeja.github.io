@@ -276,6 +276,13 @@ const UNITS = {
     speed: 1.35, los: 5, armor: { m: 2, p: 1 }, bonus: { infantry: 16 }, classes: ['cavalry', 'unique'], radius: 0.37,
     at: 'castle', age: 3, sprite: { body: 'horse', horse: 'black', barding: 'scale', rider: { weapon: 'mace', armor: 'gold', helm: 'spike', cape: true } },
   },
+  // ---- cheat unit ("how do you turn this on")
+  cobracar: {
+    name: 'Cobra Car', desc: 'A sports car with machine guns. Nobody knows how it got here.',
+    hp: 600, atk: 18, atkType: 'pierce', range: 6, reload: 0.35, speed: 2.6, los: 9,
+    armor: { m: 8, p: 8 }, bonus: { building: 25 }, classes: ['cheat'], radius: 0.4,
+    proj: 'bullet', accuracy: 1, sprite: { body: 'car' }, pop: 1,
+  },
   // ---- nature
   sheep: {
     name: 'Sheep', desc: 'Herdable livestock. Kill with a villager for food.', hp: 7, atk: 0, range: 0, reload: 2,

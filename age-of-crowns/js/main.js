@@ -334,6 +334,16 @@ const App = {
     this.game.commandRingBell(this.game.viewer);
     this.ui.notify('Town bell rung — villagers are taking shelter.', 'warn');
   },
+  applyCheat(text) {
+    if (!this.game || !text.trim()) return;
+    const msg = this.game.cheat(this.game.viewer, text);
+    if (msg) { this.ui.notify(`Cheat: ${msg}`, 'good'); this.audio.play('research'); }
+    else { this.ui.notify(`“${text.trim()}” isn’t a cheat code.`, 'warn'); this.audio.play('error'); }
+  },
+  openChat() {
+    const f = document.getElementById('chat'), inp = document.getElementById('chat-input');
+    f.hidden = false; inp.value = ''; inp.focus();
+  },
   cantAfford(missing) {
     this.ui.notify(`Not enough ${missing.join(' and ')}.`, 'warn');
     this.audio.play('error');
@@ -521,6 +531,29 @@ const Menu = {
     });
     pause.addEventListener('input', e => this.readSettings(e));
     pause.addEventListener('change', e => this.readSettings(e));
+    // cheats panel (pause menu) and keyboard chat box
+    const CHEATS = [
+      ['cheese steak jerky', '+1,000 food'], ['lumberjack', '+1,000 wood'], ['robin hood', '+1,000 gold'], ['rock on', '+1,000 stone'],
+      ['ninjalui', '+100,000 of everything'], ['marco', 'Reveal the whole map'], ['polo', 'Toggle fog of war'],
+      ['aegis', 'Instant building, training & research'], ['to the future', 'Advance one age instantly'],
+      ['how do you turn this on', 'Spawn a machine-gun Cobra Car'], ['big army', 'Spawn 6 knights and 6 archers'],
+      ['natural wonders', 'Take control of every wild animal'], ['black death', 'Wipe out all enemies'],
+      ['i r winner', 'Win immediately'], ['wimpywimpywimpy', 'Give up'],
+    ];
+    document.getElementById('cheat-list').innerHTML = CHEATS.map(([c, d]) => `<button type="button" class="cheat" data-code="${c}"><b>${c}</b><span>${d}</span></button>`).join('');
+    document.getElementById('cheat-list').addEventListener('click', e => {
+      const b = e.target.closest('.cheat'); if (!b) return;
+      app.applyCheat(b.dataset.code);
+      b.classList.add('used'); setTimeout(() => b.classList.remove('used'), 600);
+    });
+    document.getElementById('cheat-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const i = document.getElementById('cheat-input'); app.applyCheat(i.value); i.value = '';
+    });
+    const chat = document.getElementById('chat');
+    chat.addEventListener('submit', e => { e.preventDefault(); const i = document.getElementById('chat-input'); app.applyCheat(i.value); chat.hidden = true; i.blur(); });
+    document.getElementById('chat-input').addEventListener('keydown', e => { if (e.key === 'Escape') { chat.hidden = true; e.target.blur(); } e.stopPropagation(); });
+    document.getElementById('chat-input').addEventListener('blur', () => { setTimeout(() => { chat.hidden = true; }, 100); });
     const end = document.getElementById('endscreen');
     end.querySelector('#end-menu').onclick = () => app.quitToMenu();
     end.querySelector('#end-again').onclick = () => app.startGame();

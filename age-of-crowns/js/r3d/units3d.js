@@ -99,6 +99,7 @@ class UnitRenderer {
       case 'ram': this.ram(u, root, act, ft, col, spr); break;
       case 'mangonel': this.mangonel(u, root, act, ft, col, spr); break;
       case 'trebuchet': this.trebuchet(u, root, act, ft, col); break;
+      case 'car': this.car(u, root, act, ft, col); break;
       default: this.animal(u, root, act, ft, body, col); break;
     }
   }
@@ -363,6 +364,22 @@ class UnitRenderer {
     this.P(A, 'boxD', 'matte', '#4a3420', 0, -0.3, 0, 0, 0, 0, 0.26, 0.26, 0.26);
     this.P(A, 'boxD', 'matte', pc.main, 0, -0.38, 0, 0, 0, 0, 0.27, 0.06, 0.27);
     if (fire < 0.7) this.P(A, 'sphere', 'matte', '#8a8880', 0, 1.0, 0, 0, 0, 0, 0.08, 0.08, 0.08);
+  }
+
+  car(u, root, act, ft, pc) {
+    const spin = (u.animT || 0) * 14;
+    for (const [x, z] of [[-0.28, 0.2], [0.3, 0.2], [-0.28, -0.2], [0.3, -0.2]]) {
+      this.P(root, 'disc', 'matte', '#1a1a1a', x, 0.1, z, Math.PI / 2, 0, act === 'walk' ? spin : 0, 0.1, 0.06, 0.1);
+      this.P(root, 'disc', 'metal', '#9aa0a6', x, 0.1, z + Math.sign(z) * 0.031, Math.PI / 2, 0, 0, 0.05, 0.005, 0.05);
+    }
+    this.P(root, 'boxU', 'metal', '#e8c020', 0.02, 0.08, 0, 0, 0, 0, 0.82, 0.14, 0.4);
+    this.P(root, 'boxU', 'metal', '#e8c020', -0.02, 0.22, 0, 0, 0, 0, 0.36, 0.12, 0.36);
+    this.P(root, 'boxU', 'matte', '#28323c', 0.06, 0.225, 0, 0, 0, 0, 0.3, 0.1, 0.37);
+    this.P(root, 'boxU', 'matte', pc.main, 0.02, 0.2, 0, 0, 0, 0, 0.84, 0.025, 0.08);
+    this.P(root, 'box', 'matte', '#fff6c0', 0.43, 0.15, 0.13, 0, 0, 0, 0.02, 0.03, 0.06);
+    this.P(root, 'box', 'matte', '#fff6c0', 0.43, 0.15, -0.13, 0, 0, 0, 0.02, 0.03, 0.06);
+    for (const z of [0.07, -0.07]) this.P(root, 'cyl', 'metal', '#3a3e44', 0.02, 0.36, z, 0, 0, -Math.PI / 2, 0.025, 0.36, 0.025);
+    if (act === 'attack' && Math.floor(ft * 2) % 2 === 0) this.P(root, 'sphere', 'matte', '#ffe070', 0.42, 0.36, 0, 0, 0, 0, 0.06, 0.06, 0.06);
   }
 
   // ------------------------------------------------------------------ animals

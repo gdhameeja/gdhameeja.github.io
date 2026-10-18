@@ -229,6 +229,7 @@ class Input {
       return;
     }
     if (code === 'Delete') { app.deleteSelection(); return; }
+    if (code === 'Enter' || code === 'NumpadEnter') { e.preventDefault(); app.openChat(); return; }
     // control groups
     const dm = code.match(/^Digit(\d)$/);
     if (dm) {

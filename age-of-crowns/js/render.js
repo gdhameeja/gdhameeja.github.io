@@ -658,6 +658,11 @@ class Renderer {
       const wy = wy0 - p.z;
       const ca = Math.cos(p.angle), sa = Math.sin(p.angle);
       switch (p.type) {
+        case 'bullet': {
+          ctx.strokeStyle = 'rgba(255,230,120,0.95)'; ctx.lineWidth = 1.4;
+          ctx.beginPath(); ctx.moveTo(wx - ca * 6, wy - sa * 6); ctx.lineTo(wx + ca * 2, wy + sa * 2); ctx.stroke();
+          break;
+        }
         case 'arrow': case 'bolt': {
           const L = p.type === 'bolt' ? 6 : 8;
           ctx.strokeStyle = '#4a3218'; ctx.lineWidth = 1.1;

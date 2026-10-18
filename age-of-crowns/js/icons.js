@@ -21,7 +21,7 @@ function iconUnit(type, colorIdx = 1) {
   const [c, ctx] = iconCanvas('#5a6a7a', '#1e262e');
   const s = getUnitSprite(type, colorIdx, 'idle', 0, type === 'villager' ? 'v0' : '', null, null, 0);
   const body = UNITS[type].sprite.body;
-  const scale = body === 'trebuchet' ? 0.75 : body === 'horse' || body === 'ram' || body === 'mangonel' ? 1.25 : 1.75;
+  const scale = body === 'trebuchet' ? 0.75 : body === 'horse' || body === 'ram' || body === 'mangonel' || body === 'car' ? 1.25 : 1.75;
   const w = s.w * scale, h = s.h * scale;
   ctx.imageSmoothingQuality = 'high';
   ctx.drawImage(s.c, ICON_PX / 2 - s.ax * scale, ICON_PX * 0.86 - s.ay * scale, w, h);

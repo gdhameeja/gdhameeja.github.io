@@ -111,6 +111,7 @@
     <div id="fps" hidden></div>
   </div>
   <div id="tooltip"></div>
+  <form id="chat" hidden><input id="chat-input" placeholder="Type a cheat code and press Enter (Esc to close)" autocomplete="off" spellcheck="false"></form>
 </div>
 
 <!-- ======================= PAUSE / SETTINGS ======================= -->
@@ -123,6 +124,12 @@
       <button class="btn ghost" data-act="resign">Resign</button>
       <button class="btn ghost" data-act="quit">Quit to main menu</button>
     </div>
+    <details class="cheats">
+      <summary>Cheats</summary>
+      <p class="cheat-hint">Tap a cheat to use it. On a keyboard you can also press <kbd>Enter</kbd> during play and type the code.</p>
+      <div id="cheat-list"></div>
+      <form id="cheat-form" class="cheat-form"><input id="cheat-input" placeholder="Type a cheat code…" autocomplete="off" autocapitalize="off" spellcheck="false"><button class="btn small" type="submit">Use</button></form>
+    </details>
     <h3>Settings</h3>
     <div class="settings">
       <label><span>Sound effects</span><input id="set-sfx" type="range" min="0" max="1" step="0.05"></label>

@@ -543,9 +543,9 @@ class Renderer3D {
         m.compose(_v3.set(p.x, h, p.y), q, _s3.set(s, s, s));
         ur.batch('ico', 'matte').push(m, ucol('#7a766e'));
       } else {
-        const len = p.type === 'javelin' || p.type === 'spear' ? 0.5 : p.type === 'axe' ? 0.15 : 0.36;
+        const len = p.type === 'javelin' || p.type === 'spear' ? 0.5 : p.type === 'axe' ? 0.15 : p.type === 'bullet' ? 0.3 : 0.36;
         m.compose(_v3.set(p.x, h, p.y), q, _s3.set(len, 0.015, 0.015));
-        ur.batch('box', 'matte').push(m, ucol(p.type === 'axe' ? '#c8ccd0' : '#6a4a24'));
+        ur.batch('box', 'matte').push(m, ucol(p.type === 'axe' ? '#c8ccd0' : p.type === 'bullet' ? '#ffe070' : '#6a4a24'));
       }
     }
     // impacts & stuck arrows

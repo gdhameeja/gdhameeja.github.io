@@ -24,6 +24,7 @@ const BODY_DIMS = {
   deer: { w: 40, h: 40, ax: 20, ay: 34 },
   boar: { w: 40, h: 32, ax: 20, ay: 26 },
   wolf: { w: 40, h: 32, ax: 20, ay: 26 },
+  car: { w: 64, h: 44, ax: 30, ay: 34 },
 };
 
 function weaponStyle(w) {
@@ -834,6 +835,23 @@ function drawCarcass(ctx, animal) {
   ctx.beginPath(); ctx.moveTo(-5, -2); ctx.lineTo(-9, 0); ctx.moveTo(5, -2); ctx.lineTo(9, -0.5); ctx.stroke();
 }
 
+// the cheat car: a yellow sports car with roof-mounted machine guns
+function drawCar(ctx, o) {
+  if (o.dead) { drawWreck(ctx, 18); return; }
+  ellipseShadow(ctx, 0, 0, 22, 5);
+  const f = o.frame | 0;
+  ctx.fillStyle = '#e8c020';
+  ctx.beginPath(); ctx.moveTo(-20, -5); ctx.lineTo(-19, -12); ctx.lineTo(-8, -14); ctx.lineTo(-3, -20); ctx.lineTo(9, -20); ctx.lineTo(15, -13); ctx.lineTo(22, -11); ctx.lineTo(23, -5); ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = '#7a5a08'; ctx.lineWidth = 0.8; ctx.stroke();
+  ctx.fillStyle = '#28323c'; ctx.beginPath(); ctx.moveTo(-2, -19); ctx.lineTo(8, -19); ctx.lineTo(13, -13.5); ctx.lineTo(-6, -13.5); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = o.col.main; ctx.fillRect(-19, -10, 41, 2);
+  // guns
+  ctx.fillStyle = '#3a3e44'; ctx.fillRect(-1, -24, 10, 3); ctx.fillRect(6, -23.5, 9, 1.4);
+  if (o.action === 'attack' && f % 2 === 0) { ctx.fillStyle = '#ffe070'; ctx.beginPath(); ctx.arc(17, -23, 3, 0, Math.PI * 2); ctx.fill(); }
+  for (const wx of [-12, 14]) { ctx.fillStyle = '#1a1a1a'; ctx.beginPath(); ctx.arc(wx, -4, 4.5, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = '#9aa0a6'; ctx.beginPath(); ctx.arc(wx, -4, 2, 0, Math.PI * 2); ctx.fill(); }
+  ctx.fillStyle = '#fff6c0'; ctx.fillRect(20, -10, 3, 2);
+}
+
 // ------------------------------------------------------------------ villager / monk wrappers
 const VIL_TOOLS = { wood: 'woodaxe', gold: 'pick', stone: 'pick', farm: 'hoe', build: 'hammer', forage: 'forage', hunt: 'huntspear', sheep: 'crook' };
 // What each job wears: hat, vest/apron, extras
@@ -897,6 +915,7 @@ function getUnitSprite(type, colorIdx, action, frame, extra = '', task = null, c
     case 'deer': drawDeer(ctx, o); break;
     case 'boar': drawBoar(ctx, o); break;
     case 'wolf': drawWolf(ctx, o); break;
+    case 'car': drawCar(ctx, o); break;
   }
   s = { c, w: dims.w, h: dims.h, ax: dims.ax, ay: dims.ay };
   SPRITES.set(key, s);
