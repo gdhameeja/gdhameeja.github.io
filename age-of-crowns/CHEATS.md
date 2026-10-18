@@ -10,6 +10,20 @@
 Codes ignore capital letters and extra spaces. Cheats only ever affect you; the computer
 players never cheat.
 
+## No limits
+
+Once you use **any** cheat, the game stops enforcing limits for you for the rest of the match:
+
+- No population cap: Houses aren't needed and you can go past 200. The counter shows `∞`.
+- No age requirements: build a Castle, train Feudal or later units, or research later
+  technologies while still in the Dark Age.
+- No building prerequisites, such as needing a Mill before Farms. Advancing to the next age no
+  longer needs the usual buildings.
+- No 15-unit production queue limit.
+
+Costs still apply, so pair this with `ninjalui`. Upgrade lines still go in order: for example,
+Man-at-Arms comes before Long Swordsman.
+
 ## Resources
 
 | Code | Effect |

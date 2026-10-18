@@ -128,6 +128,7 @@ class UI {
 
   resTip(r) {
     const g = this.app.game, p = g.players[g.viewer];
+    if (r === 'pop' && p.noLimits) return `<h4>Population</h4><p>${p.pop}. Cheats are on, so there is no population limit.</p>`;
     if (r === 'pop') return `<h4>Population</h4><p>${p.pop} of ${p.popCap} housing. Build Houses (+5) to raise the cap, up to ${MAX_POP}.</p>`;
     let gatherers = 0;
     for (const u of g.units) if (u.owner === g.viewer && u.isVillager && u.order && u.order.type === 'gather' && KIND_RES[u.order.kind] === r) gatherers++;
@@ -142,7 +143,7 @@ class UI {
       const v = String(Math.floor(p.res[r]));
       if (this.resEls[r].textContent !== v) this.resEls[r].textContent = v;
     }
-    const pop = `${p.pop}/${p.popCap}`;
+    const pop = p.noLimits ? `${p.pop}/∞` : `${p.pop}/${p.popCap}`;
     if (this.popEl.textContent !== pop) { this.popEl.textContent = pop; this.popEl.parentElement.classList.toggle('housed', p.pop >= p.popCap && p.popCap < MAX_POP); }
     const clk = fmtTime(g.time);
     if (this.clockEl.textContent !== clk) this.clockEl.textContent = clk;
@@ -198,7 +199,7 @@ class UI {
         list.forEach((type, i) => {
           const d = BUILDINGS[type];
           const can = g.canBuildType(p.id, type);
-          if (!can.ok && d.age > p.age + 1) return;
+          if (!can.ok && d.age > p.age + 1 && !p.noLimits) return;
           const cost = p.buildingCost(type);
           cmds[i] = {
             icon: iconBuilding(type, app.renderer.styles[p.id], p.colorIdx), name: d.name, cost, desc: d.desc + (d.pop ? ` Supports ${d.pop} population.` : ''),
@@ -250,7 +251,7 @@ class UI {
     for (const t0 of def.trains || []) {
       const t = p.resolve(t0);
       const st = p.stats[t];
-      if (st.age > p.age + 1) { slot++; continue; }
+      if (st.age > p.age + 1 && !p.noLimits) { slot++; continue; }
       const can = g.canTrain(b0, t);
       const cost = p.unitCost(t);
       const queued = same.reduce((s, b) => s + b.queue.filter(q => q.kind === 'unit' && q.type === t).length, 0);

@@ -1179,7 +1179,7 @@ class Game {
     if (b.queue.length) {
       const q = b.queue[0];
       if (q.kind === 'unit') {
-        if (p.pop >= p.popCap || p.pop >= MAX_POP) {
+        if (!p.noLimits && (p.pop >= p.popCap || p.pop >= MAX_POP)) {
           if (!q.housed) { q.housed = true; this.emit('housed', p, b); }
         } else {
           q.housed = false;
@@ -1267,7 +1267,7 @@ class Game {
     for (const p of this.players) { p.pop = 0; p.popCap = 0; }
     for (const u of this.units) if (!u.dead) this.players[u.owner].pop += u.st.pop;
     for (const b of this.buildings) if (!b.dead && b.built && b.def.pop) this.players[b.owner].popCap += b.def.pop;
-    for (const p of this.players) p.popCap = Math.min(MAX_POP, p.popCap);
+    for (const p of this.players) p.popCap = p.noLimits ? Infinity : Math.min(MAX_POP, p.popCap);
   }
 
   updateVisibility() {
@@ -1352,6 +1352,7 @@ class Game {
   // ------------------------------------------------------------------ rules: building & training
   canBuildType(pid, type) {
     const p = this.players[pid], d = BUILDINGS[type];
+    if (p.noLimits) return { ok: true };
     if (d.age > p.age) return { ok: false, why: `Requires ${AGES[d.age]}` };
     if (d.req && !p.hasBuilt(d.req)) return { ok: false, why: `Requires a ${BUILDINGS[d.req].name}` };
     return { ok: true };
@@ -1381,6 +1382,7 @@ class Game {
     const p = this.players[b.owner];
     const st = p.stats[type];
     if (!b.built) return { ok: false, why: 'Under construction' };
+    if (p.noLimits) return { ok: true };
     if (st.age > p.age) return { ok: false, why: `Requires ${AGES[st.age]}` };
     if (b.queue.length >= 15) return { ok: false, why: 'Queue is full' };
     return { ok: true };
@@ -1396,11 +1398,11 @@ class Game {
     if (t.ageUp) {
       if (p.age !== t.age) return { ok: false, hidden: true };
       if ([...p.pending].some(x => TECHS[x].ageUp)) return { ok: false, hidden: true };
-      if (!p.ageReqMet(t.ageUp)) {
+      if (!p.noLimits && !p.ageReqMet(t.ageUp)) {
         const r = AGE_REQ[t.ageUp];
         return { ok: false, why: `Requires ${r.count} of: ${[...new Set(r.from)].map(x => BUILDINGS[x].name).join(', ')}` };
       }
-    } else if (t.age > p.age) return { ok: false, why: `Requires ${AGES[t.age]}` };
+    } else if (t.age > p.age && !p.noLimits) return { ok: false, why: `Requires ${AGES[t.age]}` };
     if (!b.built) return { ok: false, why: 'Under construction' };
     return { ok: true };
   }
@@ -1673,7 +1675,8 @@ class Game {
           if (q && q.id !== pid && q.alive) { this.resign(q.id); msg = `${q.name} torpedoed`; } else msg = 'No such opponent';
         }
     }
-    if (msg) { p.usedCheats = true; this.sfx('research', 0, 0); }
+    // any cheat lifts every limit for that player: housing, population cap, ages, prerequisites, queue size
+    if (msg) { p.usedCheats = true; p.noLimits = true; this.updatePop(); this.sfx('research', 0, 0); }
     return msg;
   }
 
