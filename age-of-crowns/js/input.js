@@ -391,7 +391,7 @@ class TouchControls {
     const units = app.sel.filter(s => !s.dead && s.owner === me && s.kind === 'unit');
     if (units.length) {
       // tapping one of your own things selects it, unless it's work for the selected villagers
-      if (e && e.owner === me && (e.kind === 'unit' || !this.isWorkTarget(units, e))) { app.setSelection([e]); app.selSound(); return; }
+      if (e && e.owner === me && !this.isWorkTarget(units, e)) { app.setSelection([e]); app.selSound(); return; }
       app.rightClick(x, y, false, false, false);
       return;
     }
@@ -400,9 +400,11 @@ class TouchControls {
   }
 
   isWorkTarget(units, b) {
-    if (b.kind !== 'building') return false;
     const vils = units.filter(u => u.isVillager);
     if (!vils.length) return false;
+    // your own sheep: villagers slaughter them for food
+    if (b.kind === 'unit') return !!(b.st.animal && b.st.food);
+    if (b.kind !== 'building') return false;
     if (!b.built || b.hp < b.maxHp || b.type === 'farm') return true;
     return vils.some(u => u.carry > 0 && b.def.drop && b.def.drop.includes(u.carryType));
   }
