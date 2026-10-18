@@ -383,7 +383,7 @@ class TouchControls {
   _tap(x, y) {
     const app = this.app, inp = this.inp, g = app.game, me = g.viewer;
     if (inp.mode) { inp.modeClick(x, y, false); return; }
-    const e = this.r.pick(x, y);
+    const e = this.pickTouch(x, y);
     const now = performance.now();
     const dbl = e && now - this.lastTap.t < 330 && this.lastTap.id === e.id;
     this.lastTap = { t: now, id: e ? e.id : 0 };
@@ -397,6 +397,24 @@ class TouchControls {
     }
     if (e) { app.setSelection([e]); app.selSound(); }
     else app.setSelection([]);
+  }
+
+  // Finger-friendly picking: among everything near the touch point, prefer
+  // people over animals and the entity closest to the finger.
+  pickTouch(x, y) {
+    const r = this.r, pad = r.pickPad || 0;
+    const [wx, wy] = r.is3D ? [x, y] : r.screenToWorld(x, y);
+    const zp = r.is3D ? 1 : r.cam.zoom;
+    let best = null, bs = 1e9;
+    for (const h of r.hitList) {
+      if (h.bld || h.res || h.e.dead || h.e.kind !== 'unit') continue;
+      const p = pad / zp;
+      if (wx < h.x0 - p || wx > h.x1 + p || wy < h.y0 - p || wy > h.y1 + p) continue;
+      const cx = (h.x0 + h.x1) / 2, cy = (h.y0 + h.y1) / 2;
+      const s = Math.hypot(wx - cx, wy - cy) * zp + (h.e.st.animal ? 18 : 0);
+      if (s < bs) { bs = s; best = h.e; }
+    }
+    return best || r.pick(x, y);
   }
 
   isWorkTarget(units, b) {
