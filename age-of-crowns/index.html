@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Age of Crowns</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#2d1f13">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<!-- ======================= MAIN MENU ======================= -->
+<main id="menu">
+  <header class="menu-head">
+    <h1>Age of Crowns</h1>
+    <p>Gather, build and conquer — a medieval strategy game across four ages.</p>
+  </header>
+  <div class="menu-grid">
+    <section class="panel">
+      <h2>Your realm</h2>
+      <label class="field"><span>Ruler's name</span><input id="p-name" maxlength="24" autocomplete="off"></label>
+      <div class="field"><span>Banner colour</span><div id="color-pick" class="swatches"></div></div>
+      <div class="field"><span>Civilization</span><div id="civ-cards" class="civ-cards"></div></div>
+      <div id="civ-detail" class="civ-detail"></div>
+    </section>
+    <section class="panel">
+      <h2>Battlefield</h2>
+      <div id="map-cards" class="map-cards"></div>
+      <p id="map-desc" class="map-desc"></p>
+      <div class="row2">
+        <label class="field"><span>Map size</span>
+          <select id="size-sel"><option value="tiny">Tiny — 80 tiles</option><option value="small">Small — 100 tiles</option><option value="medium">Medium — 120 tiles</option><option value="large">Large — 144 tiles</option></select>
+          <small id="size-hint"></small></label>
+        <label class="field"><span>Starting resources</span>
+          <select id="res-sel"><option value="standard">Standard</option><option value="high">High</option><option value="deathmatch">Deathmatch</option></select></label>
+      </div>
+      <div class="field"><span>Rivals</span>
+        <div id="opp-list"></div>
+        <div class="opp-actions"><button id="opp-add" class="btn small">+ Add rival</button><button id="ffa" class="btn small ghost">Free for all</button><button id="all-vs-me" class="btn small ghost">Everyone vs. me</button></div>
+      </div>
+      <div class="row2">
+        <label class="field"><span>Map visibility</span>
+          <select id="reveal-sel"><option value="normal">Fog of war</option><option value="explored">Explored</option><option value="all">All visible</option></select></label>
+        <label class="field"><span>Game speed</span>
+          <select id="mspeed-sel"><option value="1">Slow</option><option value="1.5">Normal</option><option value="2">Fast</option><option value="3">Very fast</option></select></label>
+      </div>
+      <label class="field"><span>Graphics</span>
+        <select id="gfx-sel"><option value="high">3D — high (shadows, full detail)</option><option value="medium">3D — medium</option><option value="low">3D — low (no shadows)</option><option value="2d">Classic 2D</option></select></label>
+    </section>
+  </div>
+  <div class="menu-actions">
+    <button id="start-btn" class="btn big">Begin the game</button>
+    <button id="howto-btn" class="btn ghost">How to play</button>
+  </div>
+  <section id="howto" class="panel howto" hidden>
+    <h2>How to play</h2>
+    <div class="howto-cols">
+      <div>
+        <h3>Economy</h3>
+        <p>Select villagers and right-click sheep, berries, trees, gold or stone to gather. Build a Lumber Camp, Mining Camp or Mill next to resources so villagers walk less. Farms give endless food once the hunt runs out.</p>
+        <p>Houses each support 5 population. Advance through the Feudal, Castle and Imperial Ages at the Town Center once you own two buildings of the current age.</p>
+        <h3>Victory</h3>
+        <p>Destroy every enemy unit and building, or build a Wonder and keep it standing for five minutes.</p>
+      </div>
+      <div>
+        <h3>Controls</h3>
+        <dl class="keys">
+          <dt>Left click / drag</dt><dd>Select; double-click selects all of a type on screen</dd>
+          <dt>Right click</dt><dd>Move, attack, gather, build, repair, set rally point</dd>
+          <dt>Shift + right click</dt><dd>Queue orders and waypoints</dd>
+          <dt>Ctrl + right click</dt><dd>Attack-move</dd>
+          <dt>Alt + right click</dt><dd>Garrison into a building</dd>
+          <dt>Q W E R T / A S D F G / Z X C V B</dt><dd>Command grid hotkeys</dd>
+          <dt>Ctrl + 1–9, then 1–9</dt><dd>Create and recall control groups</dd>
+          <dt>. and ,</dt><dd>Next idle villager / all idle military</dd>
+          <dt>H · Space · Del</dt><dd>Town Center · centre on selection · delete</dd>
+          <dt>Arrows, screen edge, middle drag</dt><dd>Scroll; mouse wheel zooms</dd>
+          <dt>F3 · F4 · F10 · + / −</dt><dd>Pause · scores · menu · game speed</dd>
+        </dl>
+        <h3>Touch screens</h3>
+        <dl class="keys">
+          <dt>Tap</dt><dd>Select; with units selected, tap the ground, a resource or an enemy to give the order</dd>
+          <dt>Drag · pinch</dt><dd>Scroll the map · zoom</dd>
+          <dt>Long-press, then drag</dt><dd>Draw a selection box (long-press alone selects all of that type)</dd>
+          <dt>Double-tap a unit</dt><dd>Select all of that type on screen</dd>
+          <dt>Placing a building</dt><dd>Drag the outline into place and lift your finger to build</dd>
+          <dt>Long-press a button</dt><dd>Read what it does</dd>
+        </dl>
+      </div>
+    </div>
+  </section>
+  <p class="small-screen-note">On a phone, turn it sideways for the best view of the battlefield.</p>
+</main>
+
+<!-- ======================= GAME ======================= -->
+<div id="game" hidden>
+  <canvas id="view"></canvas>
+  <div id="hud">
+    <div id="topbar"></div>
+    <div id="notices" aria-live="polite"></div>
+    <div id="scores"></div>
+    <div id="bottom"></div>
+    <div id="fps" hidden></div>
+  </div>
+  <div id="tooltip"></div>
+</div>
+
+<!-- ======================= PAUSE / SETTINGS ======================= -->
+<div id="pause" class="overlay" hidden>
+  <div class="panel modal">
+    <h2 class="pause-title">Paused</h2>
+    <div class="modal-actions">
+      <button class="btn" data-act="resume">Resume</button>
+      <button class="btn ghost" data-act="restart">Restart (new map)</button>
+      <button class="btn ghost" data-act="resign">Resign</button>
+      <button class="btn ghost" data-act="quit">Quit to main menu</button>
+    </div>
+    <h3>Settings</h3>
+    <div class="settings">
+      <label><span>Sound effects</span><input id="set-sfx" type="range" min="0" max="1" step="0.05"></label>
+      <label><span>Music volume</span><input id="set-music" type="range" min="0" max="0.6" step="0.02"></label>
+      <label class="chk"><input id="set-musicon" type="checkbox"> <span>Music</span></label>
+      <label class="chk"><input id="set-edge" type="checkbox"> <span>Scroll at screen edge</span></label>
+      <label><span>Scroll speed</span><input id="set-scroll" type="range" min="400" max="1800" step="50"></label>
+      <label><span>Health bars</span><select id="set-hp"><option value="damaged">Selected &amp; damaged</option><option value="all">Always</option><option value="selected">Selected only</option></select></label>
+      <label class="chk"><input id="set-hidpi" type="checkbox"> <span>Sharp rendering on high-DPI screens (slower)</span></label>
+      <label class="chk"><input id="set-fps" type="checkbox"> <span>Show performance counter</span></label>
+      <label><span>Graphics (next game)</span><select id="set-gfx"><option value="high">3D — high</option><option value="medium">3D — medium</option><option value="low">3D — low</option><option value="2d">Classic 2D</option></select></label>
+    </div>
+  </div>
+</div>
+
+<!-- ======================= END SCREEN ======================= -->
+<div id="endscreen" class="overlay" hidden>
+  <div class="panel modal wide">
+    <h2 class="end-title">Victory</h2>
+    <p class="end-reason"></p>
+    <div class="end-table"></div>
+    <h3>Population over time</h3>
+    <canvas class="timeline" width="760" height="180"></canvas>
+    <div class="modal-actions">
+      <button class="btn" id="end-again">Play again</button>
+      <button class="btn ghost" id="end-continue">Keep playing</button>
+      <button class="btn ghost" id="end-menu">Main menu</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/util.js"></script>
+<script src="js/entities.js"></script>
+<script src="js/path.js"></script>
+<script src="js/map.js"></script>
+<script src="js/game.js"></script>
+<script src="js/ai.js"></script>
+<script src="js/gfx.js"></script>
+<script src="js/sprites_units.js"></script>
+<script src="js/sprites_buildings.js"></script>
+<script src="js/sprites_world.js"></script>
+<script src="js/icons.js"></script>
+<script src="js/render.js"></script>
+<script src="js/vendor/three.min.js"></script>
+<script src="js/r3d/core.js"></script>
+<script src="js/r3d/terrain.js"></script>
+<script src="js/r3d/models.js"></script>
+<script src="js/r3d/units3d.js"></script>
+<script src="js/r3d/render3d.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/input.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
