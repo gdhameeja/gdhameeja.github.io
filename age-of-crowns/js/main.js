@@ -270,21 +270,22 @@ const App = {
     if (e.kind === 'unit') this.audio.play(e.isVillager ? 'selVil' : e.type === 'sheep' ? 'sheep' : 'selMil');
     else if (e.kind === 'building') this.audio.play('selBld');
   },
-  clickSelect(sx, sy, shift, ctrl) {
+  // add: Shift/Ctrl/Cmd-click toggles the unit in the selection; allOfType: every unit of that type on screen
+  clickSelect(sx, sy, add, allOfType) {
     const g = this.game;
     const e = this.renderer.pick(sx, sy);
-    if (!e) { if (!shift) this.setSelection([]); return; }
+    if (!e) { if (!add) this.setSelection([]); return; }
     const now = performance.now();
     const dbl = now - this.input.lastClick.t < 350 && this.input.lastClick.id === e.id;
     this.input.lastClick = { t: now, id: e.id };
     const own = e.owner === g.viewer;
-    if (own && (dbl || ctrl) && e.kind === 'unit') {
+    if (own && (dbl || allOfType) && e.kind === 'unit') {
       const same = this.renderer.list.filter(it => it.kind === 'unit' && it.e.owner === g.viewer && it.e.type === e.type).map(it => it.e);
       this.setSelection(same);
-    } else if (own && (dbl || ctrl) && e.kind === 'building') {
+    } else if (own && (dbl || allOfType) && e.kind === 'building') {
       const same = this.renderer.list.filter(it => it.kind === 'bld' && it.e.owner === g.viewer && it.e.type === e.type).map(it => it.e);
       this.setSelection(same);
-    } else if (shift && own && this.sel.length && this.sel[0].owner === g.viewer) {
+    } else if (add && own && this.sel.length && this.sel.every(x => x.owner === g.viewer)) {
       if (this.sel.includes(e)) this.setSelection(this.sel.filter(x => x !== e));
       else this.setSelection([...this.sel, e]);
     } else this.setSelection([e]);

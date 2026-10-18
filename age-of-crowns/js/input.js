@@ -181,8 +181,9 @@ class Input {
     const b = this.box;
     this.box = null; this.r.selBox = null;
     const drag = Math.abs(b.x1 - b.x0) + Math.abs(b.y1 - b.y0) > 6;
-    if (drag) this.app.boxSelect(b.x0, b.y0, b.x1, b.y1, e.shiftKey);
-    else this.app.clickSelect(b.x0, b.y0, e.shiftKey, e.ctrlKey);
+    const add = e.shiftKey || e.ctrlKey || e.metaKey;
+    if (drag) this.app.boxSelect(b.x0, b.y0, b.x1, b.y1, add);
+    else this.app.clickSelect(b.x0, b.y0, add, false);
   }
 
   // per-frame camera scrolling
